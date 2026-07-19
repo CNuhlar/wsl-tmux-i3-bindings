@@ -2,7 +2,7 @@
 
 Use tmux in WSL with i3-inspired, prefix-free `Alt` shortcuts. The installer does not overwrite an existing `~/.tmux.conf`; it adds a managed block and updates that block on subsequent runs.
 
-> Close Windows Terminal before installation. Terminal may rewrite `settings.json` when it exits.
+![wsl-tmux-i3-bindings screenshot](assets/screenshot.png)
 
 ## Installation
 
