@@ -24,10 +24,24 @@ if (-not (Test-Path $backupPath)) { Copy-Item $settingsPath $backupPath }
 try { $settings = Get-Content $settingsPath -Raw | ConvertFrom-Json }
 catch { throw "settings.json could not be parsed as JSON; the file was not changed. Details: $($_.Exception.Message)" }
 
-$keys = @('ctrl+space', 'alt+enter', 'alt+space', 'alt+1', 'alt+2', 'alt+3', 'alt+4', 'alt+5', 'alt+6', 'alt+7', 'alt+8', 'alt+9')
-$existing = @($settings.keybindings) | Where-Object { $keys -notcontains $_.keys }
+$keys = @('ctrl+space', 'alt+enter', 'alt+space', 'alt+1', 'alt+2', 'alt+3', 'alt+4', 'alt+5', 'alt+6', 'alt+7', 'alt+8', 'alt+9',
+    'alt+shift+left', 'alt+shift+down', 'alt+shift+up', 'alt+shift+right')
+# Alt+Shift+1..9 must reach tmux as ESC plus the US-layout shifted symbol on
+# every keyboard layout, so the keys are bound to explicit sendInput actions.
+$moveSymbols = '!@#$%^&*('
+$moves = 1..9 | ForEach-Object {
+    [pscustomobject]@{ id = "User.wslTmuxI3.moveToWindow$_"; keys = "alt+shift+$_"; input = "$([char]27)$($moveSymbols[$_ - 1])" }
+}
+$existing = @($settings.keybindings) | Where-Object { $_ -and $keys -notcontains $_.keys -and $moves.keys -notcontains $_.keys }
 $unbound = $keys | ForEach-Object { [pscustomobject]@{ id = 'unbound'; keys = $_ } }
-$settings | Add-Member -Force NoteProperty keybindings @($existing + $unbound)
+$moveBindings = $moves | ForEach-Object { [pscustomobject]@{ id = $_.id; keys = $_.keys } }
+$settings | Add-Member -Force NoteProperty keybindings @($existing + $unbound + $moveBindings)
+
+$existingActions = @($settings.actions) | Where-Object { $_ -and $moves.id -notcontains $_.id }
+$moveActions = $moves | ForEach-Object {
+    [pscustomobject]@{ command = [pscustomobject]@{ action = 'sendInput'; input = $_.input }; id = $_.id }
+}
+$settings | Add-Member -Force NoteProperty actions @($existingActions + $moveActions)
 
 $json = $settings | ConvertTo-Json -Depth 100
 [IO.File]::WriteAllText($settingsPath, $json, [Text.UTF8Encoding]::new($false))

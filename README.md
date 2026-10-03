@@ -38,6 +38,8 @@ bash "$tmp/install.sh" && rm -rf "$tmp"
 | `Esc` or `q` in resize mode | Leave resize mode |
 | `Alt+Shift+h/j/k/l` | Resize directly without entering resize mode |
 | `Alt+1..9` | Switch to a numbered window, creating it if missing |
+| `Alt+Shift+arrow keys` | Move the active pane left/down/up/right by swapping it with its neighbour |
+| `Alt+Shift+1..9` | Move the active pane to a numbered window, creating it if missing |
 | `Alt+f` | Toggle pane zoom |
 | `Alt+Space` | Select the next layout |
 | `Alt+q` | Display pane numbers |
