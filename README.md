@@ -28,7 +28,7 @@ bash "$tmp/install.sh" && rm -rf "$tmp"
 
 | Key | Action |
 |---|---|
-| `Alt+h` / `Alt+v` | Select horizontal / vertical split direction |
+| `Alt+h` / `Alt+v` | Select horizontal / vertical split direction for the current window |
 | `Alt+Enter` | Open a terminal pane in the selected direction |
 | `Alt+n` | Create a new tmux window (workspace) |
 | `Alt+arrow keys` | Focus left/down/up/right pane |
@@ -39,7 +39,7 @@ bash "$tmp/install.sh" && rm -rf "$tmp"
 | `Alt+Shift+h/j/k/l` | Resize directly without entering resize mode |
 | `Alt+1..9` | Switch to a numbered window, creating it if missing |
 | `Alt+Shift+arrow keys` | Move the active pane left/down/up/right by swapping it with its neighbour |
-| `Alt+Shift+1..9` | Move the active pane to a numbered window, creating it if missing |
+| `Alt+Shift+1..9` | Move the active pane to a numbered window, creating it if missing; it is placed using that window's split direction |
 | `Alt+f` | Toggle pane zoom |
 | `Alt+Space` | Select the next layout |
 | `Alt+q` | Display pane numbers |
